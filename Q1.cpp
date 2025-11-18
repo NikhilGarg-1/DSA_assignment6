@@ -108,3 +108,89 @@ int sizeCircular(Node* head){
     }while(p!=head);
     return c;
 }
+struct DNode{
+    int data;
+    DNode* prev;
+    DNode* next;
+};
+
+DNode* insertFirstD(DNode* head,int x){
+    DNode* t=new DNode{x,0,head};
+    if(head) head->prev=t;
+    return t;
+}
+
+DNode* insertLastD(DNode* head,int x){
+    DNode* t=new DNode{x,0,0};
+    if(!head) return t;
+    DNode* p=head;
+    while(p->next) p=p->next;
+    p->next=t;
+    t->prev=p;
+    return head;
+}
+
+DNode* insertAfterD(DNode* head,int key,int x){
+    DNode* p=head;
+    while(p){
+        if(p->data==key){
+            DNode* t=new DNode{x,p,p->next};
+            if(p->next) p->next->prev=t;
+            p->next=t;
+            return head;
+        }
+        p=p->next;
+    }
+    return head;
+}
+
+DNode* insertBeforeD(DNode* head,int key,int x){
+    if(head->data==key) return insertFirstD(head,x);
+    DNode* p=head;
+    while(p){
+        if(p->data==key){
+            DNode* t=new DNode{x,p->prev,p};
+            p->prev->next=t;
+            p->prev=t;
+            return head;
+        }
+        p=p->next;
+    }
+    return head;
+}
+
+DNode* deleteD(DNode* head,int key){
+    if(!head) return head;
+    DNode* p=head;
+    while(p){
+        if(p->data==key){
+            if(p==head){
+                head=head->next;
+                if(head) head->prev=0;
+                delete p;
+                return head;
+            }
+            if(p->next) p->next->prev=p->prev;
+            p->prev->next=p->next;
+            delete p;
+            return head;
+        }
+        p=p->next;
+    }
+    return head;
+}
+
+bool searchD(DNode* head,int x){
+    while(head){
+        if(head->data==x) return true;
+        head=head->next;
+    }
+    return false;
+}
+
+int sizeD(DNode* head){
+    int c=0;
+    while(head){ c++; head=head->next; }
+    return c;
+}
+
