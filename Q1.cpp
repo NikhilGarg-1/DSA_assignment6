@@ -1,37 +1,37 @@
 #include <iostream>
 using namespace std;
 
-struct Node {
+struct CNode {
     int data;
-    Node* next;
+    CNode* next;
 };
 
-Node* insertFirst(Node* head, int x) {
-    Node* t=new Node{x,0};
+CNode* insertFirstC(CNode* head,int x){
+    CNode* t=new CNode{x,0};
     if(!head){ t->next=t; return t; }
-    Node* p=head;
+    CNode* p=head;
     while(p->next!=head) p=p->next;
     p->next=t;
     t->next=head;
     return t;
 }
 
-Node* insertLast(Node* head,int x){
-    Node* t=new Node{x,0};
+CNode* insertLastC(CNode* head,int x){
+    CNode* t=new CNode{x,0};
     if(!head){ t->next=t; return t; }
-    Node* p=head;
+    CNode* p=head;
     while(p->next!=head) p=p->next;
     p->next=t;
     t->next=head;
     return head;
 }
 
-Node* insertAfter(Node* head,int key,int x){
+CNode* insertAfterC(CNode* head,int key,int x){
     if(!head) return head;
-    Node* p=head;
+    CNode* p=head;
     do{
         if(p->data==key){
-            Node* t=new Node{x,p->next};
+            CNode* t=new CNode{x,p->next};
             p->next=t;
             return head;
         }
@@ -40,13 +40,13 @@ Node* insertAfter(Node* head,int key,int x){
     return head;
 }
 
-Node* insertBefore(Node* head,int key,int x){
+CNode* insertBeforeC(CNode* head,int key,int x){
     if(!head) return head;
-    if(head->data==key) return insertFirst(head,x);
-    Node* p=head;
+    if(head->data==key) return insertFirstC(head,x);
+    CNode* p=head;
     do{
         if(p->next->data==key){
-            Node* t=new Node{x,p->next};
+            CNode* t=new CNode{x,p->next};
             p->next=t;
             return head;
         }
@@ -55,15 +55,15 @@ Node* insertBefore(Node* head,int key,int x){
     return head;
 }
 
-Node* del(Node* head,int key){
+CNode* deleteC(CNode* head,int key){
     if(!head) return head;
-    Node* p=head;
-    Node* q=0;
+    CNode* p=head;
+    CNode* q=0;
     do{
         if(p->data==key){
             if(p==head){
                 if(head->next==head){ delete head; return 0; }
-                Node* r=head;
+                CNode* r=head;
                 while(r->next!=head) r=r->next;
                 head=head->next;
                 r->next=head;
@@ -79,9 +79,9 @@ Node* del(Node* head,int key){
     return head;
 }
 
-bool search(Node* head,int x){
+bool searchC(CNode* head,int x){
     if(!head) return false;
-    Node* p=head;
+    CNode* p=head;
     do{
         if(p->data==x) return true;
         p=p->next;
@@ -89,26 +89,7 @@ bool search(Node* head,int x){
     return false;
 }
 
-void displayCircular(Node* head){
-    if(!head) return;
-    Node* p=head;
-    do{
-        cout<<p->data<<" ";
-        p=p->next;
-    }while(p!=head);
-    cout<<head->data<<" ";
-}
-
-int sizeCircular(Node* head){
-    if(!head) return 0;
-    int c=0;
-    Node* p=head;
-    do{
-        c++; p=p->next;
-    }while(p!=head);
-    return c;
-}
-struct DNode{
+struct DNode {
     int data;
     DNode* prev;
     DNode* next;
@@ -145,6 +126,7 @@ DNode* insertAfterD(DNode* head,int key,int x){
 }
 
 DNode* insertBeforeD(DNode* head,int key,int x){
+    if(!head) return head;
     if(head->data==key) return insertFirstD(head,x);
     DNode* p=head;
     while(p){
@@ -188,9 +170,29 @@ bool searchD(DNode* head,int x){
     return false;
 }
 
-int sizeD(DNode* head){
-    int c=0;
-    while(head){ c++; head=head->next; }
-    return c;
+int main(){
+    CNode* chead=0;
+    DNode* dhead=0;
+    int ch,x,key;
+
+    while(true){
+        cin>>ch;
+        if(ch==0) break;
+
+        if(ch==1){ cin>>x; chead=insertFirstC(chead,x); }
+        if(ch==2){ cin>>x; chead=insertLastC(chead,x); }
+        if(ch==3){ cin>>key>>x; chead=insertAfterC(chead,key,x); }
+        if(ch==4){ cin>>key>>x; chead=insertBeforeC(chead,key,x); }
+        if(ch==5){ cin>>key; chead=deleteC(chead,key); }
+        if(ch==6){ cin>>x; cout<<searchC(chead,x)<<endl; }
+
+        if(ch==7){ cin>>x; dhead=insertFirstD(dhead,x); }
+        if(ch==8){ cin>>x; dhead=insertLastD(dhead,x); }
+        if(ch==9){ cin>>key>>x; dhead=insertAfterD(dhead,key,x); }
+        if(ch==10){ cin>>key>>x; dhead=insertBeforeD(dhead,key,x); }
+        if(ch==11){ cin>>key; dhead=deleteD(dhead,key); }
+        if(ch==12){ cin>>x; cout<<searchD(dhead,x)<<endl; }
+    }
 }
+
 
